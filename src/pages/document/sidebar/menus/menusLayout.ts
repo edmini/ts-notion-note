@@ -26,10 +26,9 @@ interface Menu {
 }
 interface Path {
   d: string
-  "fill-rule"?: string
-  "clip-rule"?: string
+  "fill-rule"?: string | undefined
+  "clip-rule"?: string | undefined
 }
-
 
 const menuPathEl = (path: Path): ElementLayout => {
   const menuPathElTree: ElementLayout = {

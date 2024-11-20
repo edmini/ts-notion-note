@@ -7,11 +7,12 @@ interface Menu {
   title: string
   viewBox: string
   classes?: string[]
-  path: [{
-    d: string
-    "fill-rule"?: string
-    "clip-rule"?: string
-  }]
+  path: Path[]
+}
+interface Path {
+  d: string
+  "fill-rule"?: string | undefined
+  "clip-rule"?: string | undefined
 }
 
 const handleMenusLayout = async (menus: Menu[]): Promise<HTMLElement | SVGElement> => {
