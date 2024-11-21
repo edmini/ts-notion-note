@@ -35,7 +35,7 @@ const handleItemMenuLayout = async (): Promise<HTMLElement | SVGElement> => {
   const itemBody = await handleItemLayout()
   const menus = await handleMenusLayout(menuList)
 
-  menuTree?.appendChild(itemBody)
+  menuTree?.replaceChildren(itemBody)
   bottomMenu?.appendChild(menus)
 
   return itemMenuLayout.element

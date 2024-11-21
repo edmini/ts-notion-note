@@ -15,8 +15,17 @@ interface ElementOptions {
 interface ElementLayout {
   [LayoutEl: string]: ElementOptions
 }
+interface Note {
+  id: string
+  icon: string
+  title: string
+  parentId: string | number
+  level: number
+  cover: string
+}
 
-const itemLayoutEl = (data: any): ElementLayout => {
+
+const itemLayoutEl = (data: Note): ElementLayout => {
 
   const itemLayoutElTree: ElementLayout = {
     itemLayoutEl: {
@@ -66,8 +75,8 @@ const itemLayoutEl = (data: any): ElementLayout => {
                   class: "flex items-center justify-center h-5 w-5 rounded shrink-0",
                   subElements: [{
                     element: "span",
-                    class: data.icon.length > 0 ? "" : "hidden",
-                    text: data.icon.length > 1 ? data.icon : null
+                    class: data.icon.length > 0 ? "block" : "hidden",
+                    text: data.icon.length > 1 ? data.icon : ""
                   }, {
                     element: "svg",
                     attrsNS: { viewBox: "0 0 16 16" },
