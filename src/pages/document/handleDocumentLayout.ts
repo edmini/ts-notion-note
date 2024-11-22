@@ -1,7 +1,7 @@
 
 import elementCreator from "../../static/creator.js"
 
-const handleDocumentLayout = async () => {
+const handleDocumentLayout = async (): Promise<HTMLElement | SVGElement> => {
   const { default: documentLayoutEl } = await import("./documentLayout.js")
   const { documentLayout } = elementCreator(documentLayoutEl())
 

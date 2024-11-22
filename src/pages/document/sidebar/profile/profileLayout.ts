@@ -1,13 +1,6 @@
-import dataProxy from "../../handleStorageData.js"
 
-interface Note {
-  id: string
-  icon: string
-  title: string
-  parentId: string | number
-  level: number
-  cover: string
-}
+import dataProxy from "../../handleStorageData.js"
+import { createItem } from "../itemMenu/item/handleItemLayout.js"
 
 interface ElementOptions {
   element: string
@@ -26,6 +19,14 @@ interface ElementLayout {
   [LayoutEl: string]: ElementOptions
 }
 
+interface Note {
+  id: string
+  icon: string
+  title: string
+  parentId: string | number
+  level: number
+  cover: string
+}
 
 const profileLayoutEl = (): ElementLayout => {
 
@@ -34,6 +35,13 @@ const profileLayoutEl = (): ElementLayout => {
       element: "div",
       attrs: { role: "button", tabindex: "0" },
       class: "select-none transition-[background] duration-[20ms] ease-in cursor-pointer flex items-center min-w-0 h-8 w-auto my-1.5 mx-2 rounded-md p-0 hover:bg-notion-0/5",
+      actions: {
+        click: (e?: Event | undefined): void => {
+          e?.preventDefault()
+          const rect = (e?.target as HTMLElement).getBoundingClientRect()
+          console.log(rect.x, rect.y)
+        }
+      },
       subElements: [{
         element: "div",//photo name
         class: "flex items-center w-full text-sm min-h-[27px] h-[30px] py-1 px-2 overflow-hidden ml-0",
@@ -119,8 +127,8 @@ const profileLayoutEl = (): ElementLayout => {
               click: (e: Event | undefined): void => {
                 e?.preventDefault()
                 const newData: Note = { id: crypto.randomUUID(), icon: "", title: "Untitled", parentId: 0, level: 0, cover: "" }
+                createItem(newData)
                 dataProxy.appendData = newData
-                console.log(dataProxy.noteList)
               },
             },
             attrs: { role: "button", tabindex: "0" },

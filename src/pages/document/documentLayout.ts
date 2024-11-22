@@ -39,7 +39,7 @@ const documentLayoutEl = (): ElementLayout => {
               class: "bg-white max-w-screen z-[100] select-none print:hidden",
               subElements: [{
                 element: "div",
-                id: "headerEl",
+                id: "header",
                 class: "w-[calc(100%+0px)] max-w-screen h-11 opacity-100"
               }, {
                 element: "div",

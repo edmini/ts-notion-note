@@ -24,15 +24,14 @@ interface Note {
   cover: string
 }
 
-
 const itemLayoutEl = (data: Note): ElementLayout => {
 
   const itemLayoutElTree: ElementLayout = {
     itemLayoutEl: {
       element: "div",
       attrs: { id: `id-${data.id}` },
-      classes: data.level !== 0 ? ["hidden"] : ["block"],
-      class: "flex flex-col gap-px pb-0",
+      classes: data.level !== 0 ? ["hidden"] : ["flex"],
+      class: "flex-col gap-px pb-0",
       subElements: [{
         element: "div",
         attrs: { role: "treeitem" },
@@ -110,13 +109,14 @@ const itemLayoutEl = (data: Note): ElementLayout => {
                 class: "flex pl-[3px]",
                 subElements: [{
                   element: "div",
-                  attrs: { role: "button", tabindex: "0" },//, "data-id": data.id
-                  id: "moreBtn",
+                  attrs: { role: "button", tabindex: "0" },
+                  // id: "moreBtn",
                   class: "transition-[background] duration-[20ms] ease-in cursor-pointer flex items-center justify-center w-5 h-5 rounded ml-1 hover:bg-notion-0/5",
                   actions: {
                     click: (e?: Event | undefined): void => {
                       e?.preventDefault()
-                      // const dataId = e.target.dataset.id
+                      const rect = (e?.target as HTMLElement).getBoundingClientRect()
+                      console.log(rect.x, rect.y)
                       console.log(data.id)
                     }
                   },
@@ -159,7 +159,6 @@ const itemLayoutEl = (data: Note): ElementLayout => {
   }
 
   return itemLayoutElTree
-
 }
 
 export default itemLayoutEl

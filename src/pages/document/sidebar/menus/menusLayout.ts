@@ -55,6 +55,13 @@ const menusLayoutEl = (menu: Menu): ElementLayout => {
       element: menu.href ? "a" : "div",
       attrs: { role: "button", tabindex: 0, href: menu.href ? menu.href : null, "data-link": "spa-link" },
       class: "select-none transition-[background] duration-[150ms] cursor-pointer rounded-md flex mx-0 font-medium hover:bg-notion-0/5",
+      actions: {
+        click: (e?: Event | undefined): void => {
+          e?.preventDefault()
+          const rect = (e?.target as HTMLElement).getBoundingClientRect()
+          console.log(rect.x, rect.y, menu.title)
+        }
+      },
       subElements: [{
         element: "div",
         class: "pointer-events-none flex items-center w-full text-sm min-h-[27px] h-[30px] py-1 px-2",
