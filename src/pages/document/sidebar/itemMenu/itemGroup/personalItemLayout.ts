@@ -1,5 +1,5 @@
 
-import dataProxy from "../../handleStorageData.js"
+import dataProxy from "../../../handleStorageData.js"
 import { createItem } from "./item/handleItemLayout.js"
 
 interface ElementOptions {
@@ -26,6 +26,9 @@ interface Note {
   parentId: string | number
   level: number
   cover: string
+  isFavorited: boolean
+  isArchived: boolean
+  isPublished: boolean
 }
 
 
@@ -33,7 +36,6 @@ const personalItemLayoutEl = (): ElementLayout => {
   const personalItemLayoutElTree: ElementLayout = {
     personalItemLayoutEl: {
       element: "div",
-      id: "itemTree",
       class: "mb-3 w-full flex flex-col gap-px",
       subElements: [{
         element: "div",// menu group title
@@ -43,7 +45,7 @@ const personalItemLayoutEl = (): ElementLayout => {
           element: "span",
           styles: { textTransform: "initial" },
           class: "text-xs leading-none text-notion-145 font-normal transition-[color] duration-[100ms] ease-out",
-          text: "Private"
+          text: "Personal"
         }, {
           element: "div",// more plus icon
           class: "ml-auto select-none",
@@ -84,7 +86,7 @@ const personalItemLayoutEl = (): ElementLayout => {
               actions: {
                 click: (e: Event | undefined) => {
                   e?.preventDefault()
-                  const newData: Note = { id: crypto.randomUUID(), icon: "", title: "Untitled", parentId: 0, level: 0, cover: "" }
+                  const newData: Note = { id: crypto.randomUUID(), icon: "", title: "Untitled", parentId: 0, level: 0, cover: "", isFavorited: false, isArchived: false, isPublished: false }
                   createItem(newData)
                   dataProxy.appendData = newData
                 }

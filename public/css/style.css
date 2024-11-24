@@ -2,3 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
+.layout {
+    --content-width: minmax(auto,708px);
+    --margin-width: minmax(96px,1fr);
+    display: grid;
+    grid-template-columns: [full-start] var(--margin-left-width,var(--margin-width)) [content-start] var(--content-width) [content-end] var(--margin-right-width,var(--margin-width)) [full-end];
+    width: 100%;
+}
+.layout-full {
+    gap: inherit;
+    grid-column: full;
+}
+.layout-content {
+    gap: inherit;
+    grid-column: content;
+    min-width: 0;
+}

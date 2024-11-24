@@ -25,20 +25,20 @@ const menuList: Menu[] = [
 
 const handleItemMenuLayout = async (): Promise<HTMLElement | SVGElement> => {
   const { default: itemMenuLayoutEl } = await import("./itemMenuLayout.js")
+  const { default: handleItemGroupLayout } = await import("./itemGroup/handleItemGroupLayout.js")
   const { default: handleMenusLayout } = await import("../menus/handleMenusLayout.js")
-  const { default: handleItemLayout } = await import("./item/handleItemLayout.js")
 
   const { itemMenuLayout } = elementCreator(itemMenuLayoutEl())
 
   const itemGroup = itemMenuLayout.element.querySelector("#itemGroup")
-  const menuTree = itemMenuLayout.element.querySelector("#menuTree")
   const bottomMenu = itemMenuLayout.element.querySelector("#bottomMenu")
 
-  const itemBody = await handleItemLayout()
+  const itemGroupLayout = await handleItemGroupLayout()
   const menus = await handleMenusLayout(menuList)
-
-  menuTree?.replaceChildren(itemBody)
   bottomMenu?.appendChild(menus)
+
+
+  itemGroup?.appendChild(itemGroupLayout)
 
   return itemMenuLayout.element
 }

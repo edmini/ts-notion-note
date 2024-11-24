@@ -80,7 +80,11 @@ const sidebarLayoutEl = (): ElementLayout => {
             class: "absolute right-0 w-0 grow-0 z-[1] top-0 bottom-0 pointer-events-auto",
             subElements: [{
               element: "div",
-              class: "cursor-col-resize h-full w-3 -ml-1.5"
+              class: "group/resize cursor-col-resize h-full w-3 -ml-1.5",
+              subElements: [{
+                element: "div",
+                class: "h-full w-1 group-hover/resize:bg-notion-95/10"
+              }]
             }]
           }]
         }]

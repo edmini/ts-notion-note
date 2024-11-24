@@ -1,5 +1,6 @@
 
 import elementCreator from "../../../static/creator.js"
+import dataProxy from "../handleStorageData.js"
 
 interface Note {
   id: string
@@ -8,12 +9,19 @@ interface Note {
   parentId: string | number
   level: number
   cover: string
+  isFavorited: boolean
+  isArchived: boolean
+  isPublished: boolean
 }
 
+const handleHeaderLayout = async (id?: string): Promise<HTMLElement | SVGElement> => {
 
-const handleHeaderLayout = async (data: Note): Promise<HTMLElement | SVGElement> => {
   const { default: headerLayoutEl } = await import("./headerLayout.js")
-  const { headerLayout } = elementCreator(headerLayoutEl(data))
+
+  const datas = dataProxy.noteList
+  const data: Note[] | undefined = datas?.filter((data: Note): boolean => data.id === id)
+
+  const { headerLayout } = elementCreator(headerLayoutEl(data![0]))
   return headerLayout.element
 }
 

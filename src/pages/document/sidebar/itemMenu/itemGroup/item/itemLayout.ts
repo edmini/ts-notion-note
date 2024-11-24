@@ -15,6 +15,7 @@ interface ElementOptions {
 interface ElementLayout {
   [LayoutEl: string]: ElementOptions
 }
+
 interface Note {
   id: string
   icon: string

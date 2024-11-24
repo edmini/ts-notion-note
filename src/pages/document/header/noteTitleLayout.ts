@@ -23,6 +23,9 @@ interface Note {
   parentId: string | number
   level: number
   cover: string
+  isFavorited: boolean
+  isArchived: boolean
+  isPublished: boolean
 }
 
 
@@ -43,7 +46,7 @@ const noteTitleLayoutEl = (data: Note): ElementLayout => {
         element: "div",//icon
         id: "isIcon",
         class: "items-center justify-center h-5 w-5 rounded-md shrink-0 mr-1.5",
-        classes: data.icon ? ["flex"] : ["hidden"],
+        classes: data.icon.length > 0 ? ["flex"] : ["hidden"],
         subElements: [{
           element: "div",
           class: "flex items-center justify-center h-5 w-5",

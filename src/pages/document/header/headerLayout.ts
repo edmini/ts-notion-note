@@ -1,5 +1,6 @@
 import noteTitleLayoutEl from "./noteTitleLayout.js"
 import noteMoreLayoutEl from "./noteMoreLayout.js"
+import homeMoreElTree from "./homeMoreLayout.js"
 
 interface ElementOptions {
   element: string
@@ -25,6 +26,9 @@ interface Note {
   parentId: string | number
   level: number
   cover: string
+  isFavorited: boolean
+  isArchived: boolean
+  isPublished: boolean
 }
 
 const headerLayoutEl = (data: Note): ElementLayout => {
@@ -38,7 +42,7 @@ const headerLayoutEl = (data: Note): ElementLayout => {
         class: "flex justify-between items-center overflow-hidden h-11  pl-3 pr-2.5",
         subElements: [{
           element: "div",
-          id: "showSidebarEl",
+          id: "showSidebarIcon",
           class: "hidden shrink-0 w-12 h-12 -my-3 -mr-1.5 -ml-3 p-3",
           subElements: [{
             element: "div",
@@ -76,14 +80,14 @@ const headerLayoutEl = (data: Note): ElementLayout => {
           element: "div",
           id: "titleEl",
           class: "flex items-center leading-[1.2] text-sm h-full grow-0 mr-2 min-w-0",
-          subElements: [noteTitleLayoutEl(data).noteTitleLayoutEl]
+          subElements: data ? [noteTitleLayoutEl(data).noteTitleLayoutEl] : []
         }, {
           element: "div",
           class: "grow shrink"
         }, {
           element: "div",
           id: "headerMoreEl",
-          subElements: [noteMoreLayoutEl(data).noteMoreLayoutEl]
+          subElements: data ? [noteMoreLayoutEl(data).noteMoreLayoutEl] : [homeMoreElTree.homeMoreEl]
         }]
       }]
     }

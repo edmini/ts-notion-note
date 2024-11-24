@@ -1,7 +1,4 @@
 
-import dataProxy from "../../handleStorageData.js"
-import { createItem } from "./item/handleItemLayout.js"
-
 interface ElementOptions {
   element: string
   class?: string
@@ -17,15 +14,6 @@ interface ElementOptions {
 
 interface ElementLayout {
   [LayoutEl: string]: ElementOptions
-}
-
-interface Note {
-  id: string
-  icon: string
-  title: string
-  parentId: string | number
-  level: number
-  cover: string
 }
 
 const itemMenuLayoutEl = (): ElementLayout => {
@@ -48,12 +36,9 @@ const itemMenuLayoutEl = (): ElementLayout => {
             class: "m-0 flex flex-col gap-1",
             subElements: [{
               element: "div",
+              id: "itemGroup",
               class: "flex flex-col cursor-pointer",
-              subElements: [{
-                element: "div",
-                id: "itemGroup",
-                class: "w-full",
-              }]
+              subElements: []
             }]
           }, {
             element: "div",//menus bottom

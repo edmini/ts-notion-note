@@ -1,6 +1,6 @@
 
 import dataProxy from "../../handleStorageData.js"
-import { createItem } from "../itemMenu/item/handleItemLayout.js"
+import { createItem } from "../itemMenu/itemGroup/item/handleItemLayout.js"
 
 interface ElementOptions {
   element: string
@@ -26,6 +26,9 @@ interface Note {
   parentId: string | number
   level: number
   cover: string
+  isFavorited: boolean
+  isArchived: boolean
+  isPublished: boolean
 }
 
 const profileLayoutEl = (): ElementLayout => {
@@ -126,7 +129,7 @@ const profileLayoutEl = (): ElementLayout => {
             actions: {
               click: (e: Event | undefined): void => {
                 e?.preventDefault()
-                const newData: Note = { id: crypto.randomUUID(), icon: "", title: "Untitled", parentId: 0, level: 0, cover: "" }
+                const newData: Note = { id: crypto.randomUUID(), icon: "", title: "Untitled", parentId: 0, level: 0, cover: "", isFavorited: false, isArchived: false, isPublished: false }
                 createItem(newData)
                 dataProxy.appendData = newData
               },

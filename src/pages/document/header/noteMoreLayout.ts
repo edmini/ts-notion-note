@@ -48,7 +48,8 @@ const noteMoreLayoutEl = (data: Note): ElementLayout => {
           actions: {
             click: (e?: Event | undefined): void => {
               e?.preventDefault()
-              console.log(data.id, "Share Btn")
+              const rect = (e?.target as HTMLElement).getBoundingClientRect()
+              console.log(rect.x, rect.y, data.id, "Share Btn")
             }
           },
 
@@ -124,7 +125,7 @@ const noteMoreLayoutEl = (data: Note): ElementLayout => {
             click: (e?: Event | undefined): void => {
               e?.preventDefault()
               const rect = (e?.target as HTMLElement).getBoundingClientRect()
-              console.log(data.id, rect.x, rect.y, "More Btn")
+              console.log(rect.x, rect.y, data.id, "More Btn")
             }
           },
           subElements: [{

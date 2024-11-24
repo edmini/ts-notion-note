@@ -78,7 +78,7 @@ const menusLayoutEl = (menu: Menu): ElementLayout => {
         }, {
           element: "div",//menu title
           class: "flex-auto whitespace-nowrap min-w-0 overflow-hidden text-ellipsis",
-          text: `<span>${menu.title}</span>`
+          text: menu.title
         }]
       }]
     }

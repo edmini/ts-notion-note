@@ -25,10 +25,11 @@ const inviteMenu: Menu[] = [{ id: 1, title: "Invite members", viewBox: "0 0 20 2
 
 const handleSidebarLayout = async (): Promise<HTMLElement | SVGElement> => {
   const { default: sidebarLayoutEl } = await import("./sidebarLayout.js")
+  const { sidebarLayout } = elementCreator(sidebarLayoutEl())
+
   const { default: handleProfileLayout } = await import("./profile/handleProfileLayout.js")
   const { default: handleMenusLayout } = await import("./menus/handleMenusLayout.js")
   const { default: handleItemMenuLayout } = await import("./itemMenu/handleItemMenuLayout.js")
-  const { sidebarLayout } = elementCreator(sidebarLayoutEl())
 
   const profile = sidebarLayout.element.querySelector("#profile")
   const menus = sidebarLayout.element.querySelector("#menus")

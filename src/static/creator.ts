@@ -38,7 +38,7 @@ class CreateElement {
   }
   setClasses(classes: string[]): void {
     if (classes.length > 0) {
-      classes.forEach((classStr) => {
+      classes.forEach((classStr: string): void => {
         this.element.classList.add(classStr)
       })
     }
@@ -47,15 +47,15 @@ class CreateElement {
     this.element.setAttribute("id", tagId)
   }
   setText(text: string): void {
-    this.element.innerHTML = text
+    (this.element as HTMLElement).innerText = text
   }
   setStyles(styles: { [key: string]: string }): void {
-    Object.keys(styles).forEach((key) => {
+    Object.keys(styles).forEach((key: string): void => {
       (this.element.style as any)[key] = styles[key]
     })
   }
   setAttrs(attrs: { [key: string]: any }): void {
-    Object.keys(attrs).forEach((attr) => {
+    Object.keys(attrs).forEach((attr: string): void => {
       if (attr === "checked" && attrs[attr] === false) {
         return
       } else {
@@ -64,7 +64,7 @@ class CreateElement {
     })
   }
   setAttrsNS(attrsNS: { [key: string]: any }): void {
-    Object.keys(attrsNS).forEach((attr) => {
+    Object.keys(attrsNS).forEach((attr: string): void => {
       if (attr === "checked" && attrsNS[attr] === false) {
         return
       } else {
@@ -73,8 +73,8 @@ class CreateElement {
     })
   }
   setActions(actions: { [key: string]: (e?: Event) => void }): void {
-    Object.keys(actions).forEach((actionName) => {
-      this.element.addEventListener(actionName, (e) => {
+    Object.keys(actions).forEach((actionName: string): void => {
+      this.element.addEventListener(actionName, (e: Event): void => {
         if (e) {
           actions[actionName](e)
         } else {
@@ -99,10 +99,11 @@ class CreateElement {
 const elementCreator = (elTree: { [key: string]: ElementOptions }): { [key: string]: CreateElement } => {
   const tree: { [key: string]: CreateElement } = {}
   const elKeys = Object.keys(elTree)
-  elKeys.forEach((elementName) => {
+  elKeys.forEach((elementName: string): void => {
     tree[elementName.slice(0, -2)] = new CreateElement(elTree[elementName])
   })
   return tree
 }
 
 export default elementCreator
+
