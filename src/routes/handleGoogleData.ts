@@ -2,10 +2,19 @@
 const { google } = require("googleapis")
 const { Readable } = require("stream")
 const { dotenv } = require("dotenv")
+const { JWT } = require("google-auth-library")
 
+require('dotenv').config()
+
+interface ResultObj {
+  String: (item: string) => string
+  Number: (item: string) => number
+  Date: (item: string) => Date
+  Boolean: (item: string) => boolean
+}
 
 interface GoogleDataType {
-  auth: any
+  auth: typeof JWT | undefined
   CLIENT_EMAIL: string | undefined
   PRIVATE_KEY: string | undefined
   scopes: string[]
@@ -13,16 +22,12 @@ interface GoogleDataType {
   typeRange: string
   dataRange: string
   sheetId: string
-  result: any[]
+  result: Record<string, any>[]
   accessToken: string | null
-  resultObj: {
-    String: (item: string) => string
-    Number: (item: string) => number
-    Date: (item: string) => Date
-    Boolean: (item: string) => boolean
-  }
-  Authorize(): void
-  handleData(menus: string[], types: string[], datas: string[]): void; getSheetData(): Promise<void>
+  resultObj: { [key: string]: (item: string) => any }
+  Authorize: () => void
+  handleData(menus: string[], types: string[], datas: string[]): void
+  getSheetData(): Promise<void>
   appendData(data: any): Promise<void>
   updateData(data: any, range: string): Promise<void>
   appendRow(startIndex: number, endIndex: number): Promise<void>
@@ -47,7 +52,7 @@ class HandleGoogleData implements GoogleDataType {
   result = []
   accessToken = null
 
-  resultObj = {
+  resultObj: { [key: string]: (item: string) => any } = {
     String: (item: string): string => false || item,
     Number: (item: string): number => false || parseInt(item),
     Date: (item: string): Date => false || new Date(item),
@@ -76,10 +81,14 @@ class HandleGoogleData implements GoogleDataType {
   }
 
   handleData(menus: string[], types: string[], datas: string[]): void {
-    let temp = {}
-    datas.map((data, index) => {
+    let temp: Record<string, any> = {}
+    datas.forEach((data: string, index: number): void => {
       const dataType = types[index]
-      temp[menus[index]] = this.resultObj[dataType](data)
+      if (this.resultObj[dataType]) {
+        temp[menus[index]] = this.resultObj[dataType](data)
+      } else {
+        console.log(`Invalid data type: ${dataType}`)
+      }
     })
     this.result.push(temp)
   }
@@ -93,7 +102,7 @@ class HandleGoogleData implements GoogleDataType {
       this.menu = res.data.valueRanges[0].values
       this.type = res.data.valueRanges[1].values
       this.datas = res.data.valueRanges[2].values
-      this.datas.map((data) => {
+      this.datas.map((data: any): void => {
         this.handleData(this.menu[0], this.type[0], data)
       })
     } catch (error) {
@@ -101,7 +110,7 @@ class HandleGoogleData implements GoogleDataType {
       console.log("Google Sheet Get Error : ", error)
     }
   }
-  async appendData(data) {
+  async appendData(data: any): Promise<void> {
     try {
       const res = await this.sheets.spreadsheets.values.append({
         spreadsheetId: this.sheetId,
@@ -116,7 +125,7 @@ class HandleGoogleData implements GoogleDataType {
       console.log("Google Sheet Append Error : ", error)
     }
   }
-  async updateData(data, range) {
+  async updateData(data: any, range: string): Promise<void> {
     try {
       const res = await this.sheets.spreadsheets.values.update({
         spreadsheetId: this.sheetId,
@@ -132,7 +141,7 @@ class HandleGoogleData implements GoogleDataType {
       console.log("Google Sheet Update Error : ", error)
     }
   }
-  async appendRow(startIndex, endIndex) {
+  async appendRow(startIndex: number, endIndex: number): Promise<void> {
     try {
       const res = await this.sheets.spreadsheets.batchUpdate({
         spreadsheetId: this.sheetId,
@@ -157,7 +166,7 @@ class HandleGoogleData implements GoogleDataType {
       console.log("Google Sheet Update Error : ", error)
     }
   }
-  async moveRow(startIndex, endIndex, moveIndex) {
+  async moveRow(startIndex: number, endIndex: number, moveIndex: number): Promise<void> {
     try {
       const res = await this.sheets.spreadsheets.batchUpdate({
         spreadsheetId: this.sheetId,
@@ -182,7 +191,7 @@ class HandleGoogleData implements GoogleDataType {
       console.log("Google Sheet Update Error : ", error)
     }
   }
-  async deleteRow(startIndex, endIndex) {
+  async deleteRow(startIndex: number, endIndex: number): Promise<void> {
     try {
       const res = await this.sheets.spreadsheets.batchUpdate({
         spreadsheetId: this.sheetId,
@@ -209,7 +218,7 @@ class HandleGoogleData implements GoogleDataType {
 
 
 
-  async uploadImage(imageFile) {
+  async uploadImage(imageFile: any): Promise<void> {
     this.folderId = "1sVlNngWLL1TgMcTEW0PHnNsPmpxB9__D"
     try {
       if (!imageFile.buffer || !imageFile.originalname || !imageFile.mimetype) {
@@ -248,7 +257,7 @@ class HandleGoogleData implements GoogleDataType {
       console.log("Google Drive Save Error : ", error)
     }
   }
-  async deleteImage(imgId) {
+  async deleteImage(imgId: any): Promise<void> {
     console.log({ imgId })
     try {
       const res = await this.drive.files.delete({
