@@ -62,7 +62,6 @@ const handleDocumentLayout = async (id?: string): Promise<HTMLElement | SVGEleme
   })
   sidebarResize?.addEventListener("mousedown", handleResize)
 
-
   return documentLayout.element
 }
 

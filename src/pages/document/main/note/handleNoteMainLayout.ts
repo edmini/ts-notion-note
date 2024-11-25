@@ -21,6 +21,9 @@ interface Note {
 let coverState = false
 let iconState = false
 
+//emoji picker
+const picker = new EmojiButton()
+
 const { noteMainLayout } = elementCreator(noteMainLayoutEl())
 const { coverLayout } = elementCreator(coverLayoutEl())
 const { toolbarLayout } = elementCreator(toolbarLayoutEl())
@@ -29,8 +32,9 @@ const cover = coverLayout.element.querySelector("#cover")
 const icon = toolbarLayout.element.querySelector("#icon")
 const iconEl = toolbarLayout.element.querySelector("#iconEl")
 const isIcon = toolbarLayout.element.querySelector("#isIcon")
-const title = toolbarLayout.element.querySelector("#title")
 const iconBtn = toolbarLayout.element.querySelector("#iconBtn")
+const removeIconBtn = toolbarLayout.element.querySelector("#removeIconBtn")
+const title = toolbarLayout.element.querySelector("#title")
 const coverBtn = toolbarLayout.element.querySelector("#coverBtn")
 
 const setCover = (coverImgLink?: string): void => {
@@ -77,6 +81,30 @@ const setTitle = (titleStr?: string): void => {
   }
 }
 
+//emoji picker
+picker.on("emoji", async (selection: string): Promise<void> => {
+  setIcon(selection)
+  const id = toolbarLayout.element.dataset.id
+  dataProxy.updateData = { id: id, icon: selection }
+})
+
+iconBtn?.addEventListener("click", (): void => {
+  picker.togglePicker(iconBtn)
+  document.querySelector(".wrapper")?.classList.add("z-[999]", "w-[1500px]")
+})
+iconEl?.addEventListener("click", (): void => {
+  picker.togglePicker(iconEl)
+  document.querySelector(".wrapper")?.classList.add("z-[999]", "w-[1500px]")
+})
+removeIconBtn?.addEventListener("click", (e) => {
+  e.preventDefault()
+  e.stopPropagation()
+  setIcon()
+  const id = toolbarLayout.element.dataset.id
+  dataProxy.updateData = { id: id, icon: "" }
+})
+
+
 title?.addEventListener("mouseover", (e: Event): void => {
   e.preventDefault();
   (e.target as HTMLElement).contentEditable = 'true';
@@ -93,10 +121,13 @@ title?.addEventListener("blur", (e: Event): void => {
 })
 
 
+
 const handleNoteMainLayout = (id?: string): HTMLElement | SVGElement => {
 
   const datas = dataProxy.noteList
   const data = datas?.filter((data: Note): boolean => data.id === id)
+
+  toolbarLayout.element.setAttribute("data-id", id!)
 
   setCover(data![0]?.cover)
   setIcon(data![0]?.icon)

@@ -47,15 +47,19 @@ const toolbarLayoutEl = (): ElementLayout => {
                     subElements: [{
                       element: "span",
                       id: "icon",
-                      class: "absolute -left-3.5 -top-1.5",
-                      text: ""
+                      class: "absolute -left-3.5 -top-4",
+                      text: "",
                     }]
                   }]
                 }, {
                   element: "div",
                   id: "removeIconBtn",
-                  class: "absolute opacity-0 -right-4 -top-4 w-5 h-6 bg-notion-0/10 text-white rounded-full group-hover/icon:opacity-100",//opacity-0 and iconGroup hover opacity-100
-                  text: "x"//x icon change
+                  class: "absolute opacity-0 -right-4 -top-4 w-6 h-6 bg-notion-0/10 text-white rounded-full group-hover/icon:opacity-100",
+                  subElements: [{
+                    element: "span",
+                    class: "text-white font-bold text-center w-6",
+                    text: "X"
+                  }]
                 }]
               }]
             }]

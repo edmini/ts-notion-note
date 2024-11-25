@@ -24,7 +24,17 @@ const storage: Storage = {
 const appendDataFetch = async (data: any): Promise<any> => {
   const res = await fetch("/api", {
     method: "POST",
-    headers: { "ContentType": "application/json" },
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data)
+  })
+  const result = await res.json()
+  console.log(result)
+  return result
+}
+const updateDataFetch = async (data: any): Promise<any> => {
+  const res = await fetch("/api", {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data)
   })
   const result = await res.json()
@@ -40,13 +50,8 @@ const handleProxyData: ProxyHandler<Storage> = {
         target[property] = value
         break;
       case "appendData":
-        // (async () => {
-        //   const result = appendDataFetch(value)
-        //   console.log(result)
-        // })
-        // const result = appendDataFetch(value)
-        // console.log(result)
         if (target.noteList) {
+          appendDataFetch(value)// api fetch
           target.noteList.push(value)
           return true
         }
@@ -55,9 +60,10 @@ const handleProxyData: ProxyHandler<Storage> = {
         if (target.noteList) {
           target.noteList = target.noteList.map((data) => {
             if (data.id === value.id) {
+              updateDataFetch(value)// api fetch
               for (const key in data) {
                 if (value.hasOwnProperty(key)) {
-                  (data as any)[key] = value[key]
+                  (data as any)[key] = value[key];
                 }
               }
             }
