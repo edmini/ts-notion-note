@@ -61,7 +61,7 @@ export const createItem = (data: Note): void => {
   const noPage = itemLayout.element.querySelector("#noPage")
   const plusBtn = itemLayout.element.querySelector("#plusBtn")
 
-  const parentItem = data.parentId !== 0 ? itemBody.element.querySelector(`#id-${data.parentId}`) : null
+  const parentItem = data.parentId !== '0' ? itemBody.element.querySelector(`#id-${data.parentId}`) : null
   parentItem ? parentItem?.appendChild(itemLayout.element) : itemBody.element.appendChild(itemLayout.element)
 
   if (data.subItem) {
@@ -101,22 +101,6 @@ export const createItem = (data: Note): void => {
     createItem(newData)
   })
 }
-
-// const handleData = (favorite?: string): void => {
-//   const datas = dataProxy.noteList
-//   datas?.map((data) => {
-//     if (favorite === "favorite") {
-//       if (data.isArchived === false) {
-//         createItem(data)
-//         return
-//       }
-//       if (data.isFavorited === true) {
-//         createItem(data)
-//         return
-//       }
-//     }
-//   })
-// }
 
 const datas = dataProxy.noteList
 datas?.map((data: Note): void => {

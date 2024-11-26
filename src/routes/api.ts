@@ -21,9 +21,20 @@ router.put("/", async (req: any, res: any) => {
   const data = req.body
   console.log(data)
   const googleData = new HandleGoogleData()
-  await googleData.updateData(data.value, data.range)
+  await googleData.updateData([data.value], data.range)
   res.json({ status: googleData.status })
 });
+
+router.post("/img",multer().single("file") ,async (req: any, res: any): Promise<void> => {
+  // const data = new FormData()
+  const data = req.body
+  console.log(data)
+  // const googleData = new HandleGoogleData()
+  // await googleData.uploadImage(data)
+  // res.json({ imageId: googleData.resultId })
+
+  res.json({ status: "Image upload fail T.T" })
+})
 
 
 

@@ -60,11 +60,11 @@ const appendDataFetch = async (data: any): Promise<any> => {
 }
 const updateDataFetch = async (data: any): Promise<any> => {
   const dataKey = Object.keys(data)
-  const range: string = `documents!${NoteNumber[dataKey[2]]}${data.row}:${NoteNumber[dataKey[2]]}${data.row}`
+  const range: string = `documents!${NoteNumber[data.selector]}${data.row}:${NoteNumber[data.selector]}${data.row}`
   const res = await fetch("/api", {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ value: [data[dataKey[2]]], range: range })
+    body: JSON.stringify({ value: data.value, range: range })
   })
   const result = await res.json()
   console.log(result)

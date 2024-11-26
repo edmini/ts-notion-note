@@ -85,14 +85,55 @@ const setTitle = (titleStr?: string): void => {
   }
 }
 
+const handleFile = (e) => {
+  e.preventDefault()
+  const fileSelector = document.createElement("input")
+  let fileId = ""
+  fileSelector.type = "file"
+  fileSelector.addEventListener("change", async (e) => {
+    e.preventDefault()
+    const file = e.target.files[0]
+    const metaData = {
+      name: file.name,
+      mimeType: file.type,
+      parents: ['1sVlNngWLL1TgMcTEW0PHnNsPmpxB9__D']
+    }
+    const formData = new FormData()
+    formData.append("metadata", new Blob([JSON.stringify(metaData)], { type: "application/json" }))
+    formData.append("file", file)
+
+    console.log(file)
+    const res = await fetch("/api/img", {
+      method: "POST",
+      body: formData
+    })
+    const result = await res.json()
+    console.log(result)
+    fileId = result
+  })
+  fileSelector.click()
+
+}
+
+const updateDataProxy = (selector: string, value: string): void => {
+  const id = toolbarLayout.element.dataset.id
+  const row = toolbarLayout.element.dataset.row
+  dataProxy.updateData = { row: row, id: id, selector: selector, value: value }
+}
+//cover add
+coverBtn?.addEventListener("click", async (e: Event) => {
+  console.log("coverBtn")
+  e.preventDefault()
+  handleFile(e)
+
+})
+
 //emoji picker
 picker.on("emoji", async (selection: string): Promise<void> => {
   setIcon(selection)
-  const id = toolbarLayout.element.dataset.id
-  const row = toolbarLayout.element.dataset.row
-  dataProxy.updateData = { row: row, id: id, icon: selection }
+  updateDataProxy("icon", selection)
 })
-
+//icon Change
 iconBtn?.addEventListener("click", (): void => {
   picker.togglePicker(iconBtn)
   document.querySelector(".wrapper")?.classList.add("z-[999]", "w-[1500px]")
@@ -105,12 +146,10 @@ removeIconBtn?.addEventListener("click", (e) => {
   e.preventDefault()
   e.stopPropagation()
   setIcon()
-  const id = toolbarLayout.element.dataset.id
-  const row = toolbarLayout.element.dataset.row
-  dataProxy.updateData = { row: row, id: id, icon: "" }
+  updateDataProxy("icon", "")
 })
 
-
+//Title Change
 title?.addEventListener("mouseover", (e: Event): void => {
   e.preventDefault();
   (e.target as HTMLElement).contentEditable = 'true';
@@ -123,11 +162,8 @@ title?.addEventListener("blur", (e: Event): void => {
   e.preventDefault();
   (e.target as HTMLElement).contentEditable = 'false';
   const newTitle = (e.target as HTMLElement).innerText
-  const id = toolbarLayout.element.dataset.id
-  const row = toolbarLayout.element.dataset.row
-  dataProxy.updateData = { row: row, id: id, title: newTitle }
+  updateDataProxy("title", newTitle)
 })
-
 
 const handleNoteMainLayout = (id?: string): HTMLElement | SVGElement => {
 
