@@ -21,7 +21,7 @@ interface GoogleDataType {
   menuRange: string
   typeRange: string
   dataRange: string
-  sheetId: string
+  sheetId: string | undefined
   result: Record<string, any>[]
   accessToken: string | null
   resultObj: { [key: string]: (item: string) => any }
@@ -47,7 +47,7 @@ class HandleGoogleData implements GoogleDataType {
   menuRange = "documents!A1:L1"
   typeRange = "documents!A2:L2"
   dataRange = "documents!A3:L"
-  sheetId = "1WSAVnGbdV2QlF_kuagqQSr5r69BCPWTckXNESU03ufM"
+  sheetId = process.env.SHEET_ID
 
   result = []
   accessToken = null
@@ -58,7 +58,15 @@ class HandleGoogleData implements GoogleDataType {
     Date: (item: string): Date => false || new Date(item),
     Boolean: (item: string): boolean => false || JSON.parse(item.toLowerCase())
   }
-  auth: any; sheets: any; drive: any; folderId: string | undefined; menu: any; type: any; datas: any; status: number | undefined; resultId: string | undefined
+  auth: any
+  sheets: any;
+  drive: any;
+  // folderId: string | undefined; 
+  menu: [string[]];
+  type: [string[]];
+  datas: [string[][]];
+  status: number | undefined;
+  // resultId: string | undefined
   constructor() {
     this.Authorize()
   }
@@ -102,6 +110,7 @@ class HandleGoogleData implements GoogleDataType {
       this.menu = res.data.valueRanges[0].values
       this.type = res.data.valueRanges[1].values
       this.datas = res.data.valueRanges[2].values
+
       this.datas.map((data: any): void => {
         this.handleData(this.menu[0], this.type[0], data)
       })
@@ -219,7 +228,7 @@ class HandleGoogleData implements GoogleDataType {
 
 
   async uploadImage(imageFile: any): Promise<void> {
-    this.folderId = "1sVlNngWLL1TgMcTEW0PHnNsPmpxB9__D"
+    this.folderId = process.env.FOLDER_ID
     try {
       if (!imageFile.buffer || !imageFile.originalname || !imageFile.mimetype) {
         throw new Error("Invalid file data")

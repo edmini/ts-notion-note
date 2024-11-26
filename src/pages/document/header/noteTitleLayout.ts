@@ -17,15 +17,19 @@ interface ElementLayout {
 }
 
 interface Note {
-  id: string
+  _id: string
   icon: string
   title: string
   parentId: string | number
   level: number
-  cover: string
+  coverImage: string
   isFavorited: boolean
   isArchived: boolean
   isPublished: boolean
+  content: string
+  userId: string
+  createdAt: Date
+  row: number
 }
 
 

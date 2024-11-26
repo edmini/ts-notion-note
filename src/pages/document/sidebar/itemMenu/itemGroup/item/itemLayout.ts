@@ -17,12 +17,20 @@ interface ElementLayout {
 }
 
 interface Note {
-  id: string
+  _id: string
   icon: string
   title: string
   parentId: string | number
   level: number
-  cover: string
+  coverImage: string
+  isFavorited: boolean
+  isArchived: boolean
+  isPublished: boolean
+  content: string
+  userId: string
+  createdAt: Date
+  row: number
+
 }
 
 const itemLayoutEl = (data: Note): ElementLayout => {
@@ -30,7 +38,7 @@ const itemLayoutEl = (data: Note): ElementLayout => {
   const itemLayoutElTree: ElementLayout = {
     itemLayoutEl: {
       element: "div",
-      attrs: { id: `id-${data.id}` },
+      attrs: { id: `id-${data._id}` },
       classes: data.level !== 0 ? ["hidden"] : ["flex"],
       class: "flex-col gap-px pb-0",
       subElements: [{
@@ -40,7 +48,7 @@ const itemLayoutEl = (data: Note): ElementLayout => {
         class: "group/item flex text-inherit no-underline select-none transition-[background] duration-[150ms] cursor-pointer w-full rounded-md mx-0 hover:bg-notion-0/5",
         subElements: [{
           element: "a",
-          attrs: { href: `/document/${data.id}`, "data-link": "spa-link" },
+          attrs: { href: `/document/${data._id}`, "data-link": "spa-link" },
           class: "flex items-center w-full text-sm min-h-[27px] h-[30px] py-[5px] px-2 rounded-md",
           subElements: [{
             element: "div",//icon
@@ -118,7 +126,7 @@ const itemLayoutEl = (data: Note): ElementLayout => {
                       e?.preventDefault()
                       const rect = (e?.target as HTMLElement).getBoundingClientRect()
                       console.log(rect.x, rect.y)
-                      console.log(data.id)
+                      console.log(data._id)
                     }
                   },
                   subElements: [{

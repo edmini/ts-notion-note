@@ -7,15 +7,19 @@ import coverLayoutEl from "./cover/coverLayout.js"
 import toolbarLayoutEl from "./toolbar/toolbarLayout.js"
 
 interface Note {
-  id: string
+  _id: string
   icon: string
   title: string
   parentId: string | number
   level: number
-  cover: string
+  coverImage: string
   isFavorited: boolean
   isArchived: boolean
   isPublished: boolean
+  content: string
+  userId: string
+  createdAt: Date
+  row: number
 }
 
 let coverState = false
@@ -85,7 +89,8 @@ const setTitle = (titleStr?: string): void => {
 picker.on("emoji", async (selection: string): Promise<void> => {
   setIcon(selection)
   const id = toolbarLayout.element.dataset.id
-  dataProxy.updateData = { id: id, icon: selection }
+  const row = toolbarLayout.element.dataset.row
+  dataProxy.updateData = { row: row, id: id, icon: selection }
 })
 
 iconBtn?.addEventListener("click", (): void => {
@@ -101,7 +106,8 @@ removeIconBtn?.addEventListener("click", (e) => {
   e.stopPropagation()
   setIcon()
   const id = toolbarLayout.element.dataset.id
-  dataProxy.updateData = { id: id, icon: "" }
+  const row = toolbarLayout.element.dataset.row
+  dataProxy.updateData = { row: row, id: id, icon: "" }
 })
 
 
@@ -117,19 +123,21 @@ title?.addEventListener("blur", (e: Event): void => {
   e.preventDefault();
   (e.target as HTMLElement).contentEditable = 'false';
   const newTitle = (e.target as HTMLElement).innerText
-  console.log(newTitle)
+  const id = toolbarLayout.element.dataset.id
+  const row = toolbarLayout.element.dataset.row
+  dataProxy.updateData = { row: row, id: id, title: newTitle }
 })
-
 
 
 const handleNoteMainLayout = (id?: string): HTMLElement | SVGElement => {
 
   const datas = dataProxy.noteList
-  const data = datas?.filter((data: Note): boolean => data.id === id)
+  const data = datas?.filter((data: Note): boolean => data._id === id)
 
   toolbarLayout.element.setAttribute("data-id", id!)
+  toolbarLayout.element.setAttribute("data-row", data![0]?.row)
 
-  setCover(data![0]?.cover)
+  setCover(data![0]?.coverImage)
   setIcon(data![0]?.icon)
   setTitle(data![0]?.title)
 
@@ -141,7 +149,6 @@ const handleNoteMainLayout = (id?: string): HTMLElement | SVGElement => {
   toolbarEl?.appendChild(toolbarLayout.element)
 
   return noteMainLayout.element
-
 }
 
 export default handleNoteMainLayout

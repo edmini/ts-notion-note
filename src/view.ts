@@ -1,3 +1,4 @@
+import dataProxy from "./pages/document/handleStorageData.js"
 
 interface Params {
   id: string
@@ -15,6 +16,12 @@ const views = {
     return notFoundLayout
   },
   Document: async (params?: Params): Promise<HTMLElement | SVGElement> => {
+    if (!params?.id) {
+      const res = await fetch("/api")
+      const result = await res.json()
+      dataProxy.noteList = result
+    }
+
     const { default: handleDocumentLayout } = await import("./pages/document/handleDocumentLayout.js")
     const documentLayout = await handleDocumentLayout(params?.id)
     return documentLayout

@@ -23,15 +23,20 @@ interface ElementLayout {
 }
 
 interface Note {
-  id: string
+  _id: string
   icon: string
   title: string
   parentId: string | number
   level: number
-  cover: string
+  coverImage: string
   isFavorited: boolean
   isArchived: boolean
   isPublished: boolean
+  content: string
+  userId: string
+  createdAt: Date
+  row: number
+
   subItem?: boolean
 }
 
@@ -91,7 +96,7 @@ export const createItem = (data: Note): void => {
   //plusBtn click
   plusBtn?.addEventListener("click", (e: Event): void => {
     e.preventDefault()
-    const newData = { id: crypto.randomUUID(), icon: "", title: "Untitle", parentId: data.id, level: data.level + 1, cover: "", isFavorited: false, isArchived: false, isPublished: false, subItem: true }
+    const newData = { _id: crypto.randomUUID(), icon: "", title: "Untitled", parentId: data._id, level: data.level + 1, coverImage: "", isFavorited: false, isArchived: false, isPublished: false, content: "", userId: "신ED", createdAt: new Date(), row: 0, subItem: true }
     dataProxy.appendData = newData
     createItem(newData)
   })

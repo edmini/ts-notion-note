@@ -5,14 +5,24 @@ const HandleGoogleData = require("./handleGoogleData")
 const router = express.Router()
 
 router.get("/", async (req: any, res: any) => {
-  res.json({ "greeing": "Hello World" })
+  const googleData = new HandleGoogleData()
+  await googleData.getSheetData()
+  res.json(googleData.result)
 });
+router.post("/", async (req: any, res: any) => {
+  const data = req.body
+  console.log(data)
+  const appendValue = [data.row === 0 ? "=row()" : data.row, data._id, data.title, data.content, data.isArchived, data.isPublished, data.isFavorited, data.parentId, data.level, data.coverImage, data.icon, data.userId, data.createdAt]
+  const googleData = new HandleGoogleData()
+  await googleData.appendData(appendValue)
+  res.json({ status: googleData.status })
+})
 router.put("/", async (req: any, res: any) => {
   const data = req.body
   console.log(data)
-  const googlData = new HandleGoogleData()
-  console.log(googlData.CLIENT_EMAIL)
-  res.json({ "greeing": "Hello World" })
+  const googleData = new HandleGoogleData()
+  await googleData.updateData(data.value, data.range)
+  res.json({ status: googleData.status })
 });
 
 

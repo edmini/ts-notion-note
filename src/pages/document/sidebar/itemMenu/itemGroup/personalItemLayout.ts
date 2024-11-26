@@ -20,15 +20,19 @@ interface ElementLayout {
 }
 
 interface Note {
-  id: string
+  _id: string
   icon: string
   title: string
   parentId: string | number
   level: number
-  cover: string
+  coverImage: string
   isFavorited: boolean
   isArchived: boolean
   isPublished: boolean
+  content: string
+  userId: string
+  createdAt: Date
+  row: number
 }
 
 
@@ -86,7 +90,7 @@ const personalItemLayoutEl = (): ElementLayout => {
               actions: {
                 click: (e: Event | undefined) => {
                   e?.preventDefault()
-                  const newData: Note = { id: crypto.randomUUID(), icon: "", title: "Untitled", parentId: 0, level: 0, cover: "", isFavorited: false, isArchived: false, isPublished: false }
+                  const newData: Note = { _id: crypto.randomUUID(), icon: "", title: "Untitled", parentId: 0, level: 0, coverImage: "", isFavorited: false, isArchived: false, isPublished: false, content: "", userId: "신ED", createdAt: new Date(), row: 0 }
                   createItem(newData)
                   dataProxy.appendData = newData
                 }

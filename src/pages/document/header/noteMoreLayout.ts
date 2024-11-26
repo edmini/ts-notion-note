@@ -17,12 +17,19 @@ interface ElementLayout {
 }
 
 interface Note {
-  id: string
+  _id: string
   icon: string
   title: string
   parentId: string | number
   level: number
-  cover: string
+  coverImage: string
+  isFavorited: boolean
+  isArchived: boolean
+  isPublished: boolean
+  content: string
+  userId: string
+  createdAt: Date
+  row: number
 }
 
 
@@ -49,7 +56,7 @@ const noteMoreLayoutEl = (data: Note): ElementLayout => {
             click: (e?: Event | undefined): void => {
               e?.preventDefault()
               const rect = (e?.target as HTMLElement).getBoundingClientRect()
-              console.log(rect.x, rect.y, data.id, "Share Btn")
+              console.log(rect.x, rect.y, data._id, "Share Btn")
             }
           },
 
@@ -64,7 +71,7 @@ const noteMoreLayoutEl = (data: Note): ElementLayout => {
             actions: {
               click: (e?: Event | undefined): void => {
                 e?.preventDefault()
-                console.log(data.id, "Comment Btn")
+                console.log(data._id, "Comment Btn")
               }
             },
             class: "select-none transition-[background] duration-[20ms] ease-in cursor-pointer inline-flex items-center justify-center shrink-0 rounded-md h-7 w-[33px] p-0 mr-0.5 hover:bg-notion-0/5",
@@ -85,7 +92,7 @@ const noteMoreLayoutEl = (data: Note): ElementLayout => {
           actions: {
             click: (e?: Event | undefined): void => {
               e?.preventDefault()
-              console.log(data.id, "History Btn")
+              console.log(data._id, "History Btn")
             }
           },
 
@@ -105,7 +112,7 @@ const noteMoreLayoutEl = (data: Note): ElementLayout => {
           actions: {
             click: (e?: Event | undefined): void => {
               e?.preventDefault()
-              console.log(data.id, "Favorite Btn")
+              console.log(data._id, "Favorite Btn")
             }
           },
           subElements: [{
@@ -125,7 +132,7 @@ const noteMoreLayoutEl = (data: Note): ElementLayout => {
             click: (e?: Event | undefined): void => {
               e?.preventDefault()
               const rect = (e?.target as HTMLElement).getBoundingClientRect()
-              console.log(rect.x, rect.y, data.id, "More Btn")
+              console.log(rect.x, rect.y, data._id, "More Btn")
             }
           },
           subElements: [{
