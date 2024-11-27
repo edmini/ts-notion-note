@@ -85,47 +85,45 @@ const setTitle = (titleStr?: string): void => {
   }
 }
 
-const handleFile = (e) => {
-  e.preventDefault()
-  const fileSelector = document.createElement("input")
-  let fileId = ""
-  fileSelector.type = "file"
-  fileSelector.addEventListener("change", async (e) => {
-    e.preventDefault()
-    const file = e.target.files[0]
-    const metaData = {
-      name: file.name,
-      mimeType: file.type,
-      parents: ['1sVlNngWLL1TgMcTEW0PHnNsPmpxB9__D']
-    }
-    const formData = new FormData()
-    formData.append("metadata", new Blob([JSON.stringify(metaData)], { type: "application/json" }))
-    formData.append("file", file)
-
-    console.log(file)
-    const res = await fetch("/api/img", {
-      method: "POST",
-      body: formData
-    })
-    const result = await res.json()
-    console.log(result)
-    fileId = result
-  })
-  fileSelector.click()
-
-}
-
+//update dataProxy
 const updateDataProxy = (selector: string, value: string): void => {
   const id = toolbarLayout.element.dataset.id
   const row = toolbarLayout.element.dataset.row
   dataProxy.updateData = { row: row, id: id, selector: selector, value: value }
 }
+
+// file upload and setCover
+const handleFile = (e: Event): void => {
+  e.preventDefault()
+  const fileSelector = document.createElement("input")
+  let fileId = ""
+  fileSelector.type = "file"
+  fileSelector.setAttribute("name", "file")
+  fileSelector.addEventListener("change", async (e) => {
+    e.preventDefault()
+    const file = e.target?.files[0]
+    const uploadFile = new FormData()
+    uploadFile.append("file", file)
+    const res = await fetch("/api/imageUpload", {
+      method: "POST",
+      body: uploadFile,
+    })
+    const result = await res.json()
+    console.log(result)
+    if (result.status === 200) {
+      fileId = result.imageId
+      updateDataProxy("coverImage", fileId)
+      setCover(fileId)
+    } else {
+      alert("Image upload fail")
+    }
+  })
+  fileSelector.click()
+}
 //cover add
 coverBtn?.addEventListener("click", async (e: Event) => {
-  console.log("coverBtn")
   e.preventDefault()
   handleFile(e)
-
 })
 
 //emoji picker
@@ -165,18 +163,14 @@ title?.addEventListener("blur", (e: Event): void => {
   updateDataProxy("title", newTitle)
 })
 
-const handleNoteMainLayout = (id?: string): HTMLElement | SVGElement => {
+const handleNoteMainLayout = (data: Note): HTMLElement | SVGElement => {
 
-  const datas = dataProxy.noteList
-  const data = datas?.filter((data: Note): boolean => data._id === id)
+  toolbarLayout.element.setAttribute("data-id", data._id!)
+  toolbarLayout.element.setAttribute("data-row", data.row.toString())
 
-  toolbarLayout.element.setAttribute("data-id", id!)
-  toolbarLayout.element.setAttribute("data-row", data![0]?.row)
-
-  setCover(data![0]?.coverImage)
-  setIcon(data![0]?.icon)
-  setTitle(data![0]?.title)
-
+  setCover(data?.coverImage)
+  setIcon(data?.icon)
+  setTitle(data?.title)
 
   const coverEl = noteMainLayout.element.querySelector("#coverEl")
   const toolbarEl = noteMainLayout.element.querySelector("#toolbarEl")

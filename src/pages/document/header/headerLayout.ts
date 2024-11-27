@@ -1,6 +1,3 @@
-import noteTitleLayoutEl from "./noteTitleLayout.js"
-import noteMoreLayoutEl from "./noteMoreLayout.js"
-import homeMoreElTree from "./homeMoreLayout.js"
 
 interface ElementOptions {
   element: string
@@ -19,23 +16,7 @@ interface ElementLayout {
   [LayoutEl: string]: ElementOptions
 }
 
-interface Note {
-  _id: string
-  icon: string
-  title: string
-  parentId: string | number
-  level: number
-  coverImage: string
-  isFavorited: boolean
-  isArchived: boolean
-  isPublished: boolean
-  content: string
-  userId: string
-  createdAt: Date
-  row: number
-}
-
-const headerLayoutEl = (data: Note): ElementLayout => {
+const headerLayoutEl = (): ElementLayout => {
 
   const headerLayoutElTree: ElementLayout = {
     headerLayoutEl: {
@@ -82,16 +63,14 @@ const headerLayoutEl = (data: Note): ElementLayout => {
           }]
         }, {
           element: "div",
-          id: "titleEl",
+          id: "headerTitleEl",
           class: "flex items-center leading-[1.2] text-sm h-full grow-0 mr-2 min-w-0",
-          subElements: data ? [noteTitleLayoutEl(data).noteTitleLayoutEl] : []
         }, {
           element: "div",
           class: "grow shrink"
         }, {
           element: "div",
           id: "headerMoreEl",
-          subElements: data ? [noteMoreLayoutEl(data).noteMoreLayoutEl] : [homeMoreElTree.homeMoreEl]
         }]
       }]
     }

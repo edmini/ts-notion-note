@@ -59,7 +59,6 @@ const appendDataFetch = async (data: any): Promise<any> => {
   return result
 }
 const updateDataFetch = async (data: any): Promise<any> => {
-  const dataKey = Object.keys(data)
   const range: string = `documents!${NoteNumber[data.selector]}${data.row}:${NoteNumber[data.selector]}${data.row}`
   const res = await fetch("/api", {
     method: "PUT",
