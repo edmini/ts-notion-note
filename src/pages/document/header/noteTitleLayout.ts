@@ -33,7 +33,6 @@ interface Note {
   row: number
 }
 
-
 const noteTitleLayoutEl = (data: Note): ElementLayout => {
   const noteTitleLayoutElTree: ElementLayout = {
     noteTitleLayoutEl: {
@@ -41,13 +40,6 @@ const noteTitleLayoutEl = (data: Note): ElementLayout => {
       id: "noteTitle",
       attrs: { role: "button", tabindex: 0 },
       class: "select-none transition-[background] duration-[20ms] ease-in cursor-pointer inline-flex items-center shrink whitespace-nowrap h-6 rounded-md text-sm leading-[1.2] min-w-0 px-1.5 text-notion-55 hover:bg-notion-0/5",
-      // actions: {
-      //   click: (e: Event | undefined): void => {
-      //     e?.preventDefault()
-      //     const rect = (e?.target as HTMLElement).getBoundingClientRect()
-      //     console.log(rect.x, rect.y, data.title, data.icon)
-      //   }
-      // },
       subElements: [{
         element: "div",//icon
         id: "isIcon",
@@ -61,7 +53,7 @@ const noteTitleLayoutEl = (data: Note): ElementLayout => {
             class: "h-3.5 w-3.5 text-sm leading-none ml-0 text-notion-0",
             subElements: [{
               element: "span",
-              id: "icon",
+              id: "headerIcon",
               class: "w-full h-full",
               text: data.icon
             }]
@@ -69,7 +61,7 @@ const noteTitleLayoutEl = (data: Note): ElementLayout => {
         }]
       }, {
         element: "div",
-        id: "title",
+        id: "headerTitle",
         class: "whitespace-nowrap overflow-hidden text-ellipsis max-w-[240px]",
         text: data.title
       }]

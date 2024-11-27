@@ -59,7 +59,7 @@ const setCover = (coverImgLink?: string): void => {
   }
 }
 
-const setIcon = (iconStr?: string): void => {
+export const setIcon = (iconStr?: string): void => {
   if (iconStr) {
     iconState = true
     iconEl?.classList.remove("hidden")
@@ -77,13 +77,37 @@ const setIcon = (iconStr?: string): void => {
   }
 }
 
-const setTitle = (titleStr?: string): void => {
+export const setTitle = (titleStr?: string): void => {
   if (titleStr) {
     (title as HTMLElement).innerText = titleStr;
   } else {
     (title as HTMLElement).innerText = "";
   }
 }
+
+const setSidebarIcon = (iconStr?: string) => {
+  const id = toolbarLayout.element.dataset.id
+  const currentSidebar = document.querySelector(`#id-${id}`)
+  const sidebarIcon = currentSidebar?.querySelector("#sidebarIcon")
+  const sidebarIconNext = sidebarIcon?.nextSibling;
+  sidebarIcon && (sidebarIcon as HTMLElement)?.innerText = iconStr;
+  (sidebarIcon as HTMLElement).classList.contains("hidden") && (sidebarIcon as HTMLElement).classList.remove("hidden");
+  !(sidebarIconNext as HTMLElement).classList.contains("hidden") && (sidebarIconNext as HTMLElement).classList.add("hidden");
+
+
+}
+const setSidebarTitle = (titleStr?: string) => {
+
+}
+const setHeaderIcon = (iconStr?: string) => {
+  const headerIcon = document.querySelector("#headerIcon");
+  const headerIsIcon = document.querySelector("#isIcon");
+  headerIcon && (headerIcon as HTMLElement)?.innerText = iconStr;
+  (headerIsIcon as HTMLElement).classList.contains("hidden") && (headerIsIcon as HTMLElement).classList.remove("hidden");
+}
+const setHeaderTitle = (titleStr?: string) => {
+}
+
 
 //update dataProxy
 const updateDataProxy = (selector: string, value: string): void => {
@@ -129,16 +153,18 @@ coverBtn?.addEventListener("click", async (e: Event) => {
 //emoji picker
 picker.on("emoji", async (selection: string): Promise<void> => {
   setIcon(selection)
+  setSidebarIcon(selection)
+  setHeaderIcon(selection)
   updateDataProxy("icon", selection)
 })
 //icon Change
 iconBtn?.addEventListener("click", (): void => {
   picker.togglePicker(iconBtn)
-  document.querySelector(".wrapper")?.classList.add("z-[999]", "w-[1500px]")
+  document.querySelector(".wrapper")?.classList.add("z-[999]")
 })
 iconEl?.addEventListener("click", (): void => {
   picker.togglePicker(iconEl)
-  document.querySelector(".wrapper")?.classList.add("z-[999]", "w-[1500px]")
+  document.querySelector(".wrapper")?.classList.add("z-[999]")
 })
 removeIconBtn?.addEventListener("click", (e) => {
   e.preventDefault()

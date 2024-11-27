@@ -7,7 +7,8 @@ const handleOverlayLayout = async (data: any): Promise<HTMLElement | SVGElement>
   const { overlayLayout } = elementCreator(overlayLayoutEl(data))
 
   const overlayLayoutRemove = overlayLayout.element.querySelector("#overlayLayoutRemove")
-  overlayLayoutRemove?.addEventListener("click", (e: Event) => {
+
+  overlayLayoutRemove?.addEventListener("click", (e: Event): void => {
     e.preventDefault()
     e.stopPropagation()
     overlayLayout.element.remove()

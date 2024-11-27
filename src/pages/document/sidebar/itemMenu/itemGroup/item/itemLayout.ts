@@ -83,6 +83,7 @@ const itemLayoutEl = (data: Note): ElementLayout => {
                   class: "flex items-center justify-center h-5 w-5 rounded shrink-0",
                   subElements: [{
                     element: "span",
+                    id: "sidebarIcon",
                     class: data.icon.length > 0 ? "block" : "hidden",
                     text: data.icon.length > 1 ? data.icon : ""
                   }, {

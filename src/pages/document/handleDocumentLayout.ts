@@ -9,7 +9,7 @@ const handleDocumentLayout = async (id?: string): Promise<HTMLElement | SVGEleme
   const { default: documentLayoutEl } = await import("./documentLayout.js")
   const { documentLayout } = elementCreator(documentLayoutEl())
 
-  const { default: handleNoteMainLayout } = await import("./main/note/handleNoteMainLayout.js")
+  const { default: handleNoteMainLayout, setIcon, setTitle } = await import("./main/note/handleNoteMainLayout.js")
   const { default: handleSidebarLayout } = await import("./sidebar/handleSidebarLayout.js")
   const { default: handleHeaderLayout } = await import("../../pages/document/header/handleHeaderLayout.js")
   const sidebarLayout = await handleSidebarLayout()
@@ -22,30 +22,67 @@ const handleDocumentLayout = async (id?: string): Promise<HTMLElement | SVGEleme
   sidebarEl?.appendChild(sidebarLayout)
   headerEl?.replaceChildren(headerLayout)
 
-  if (id) {
+  if (!id) {
+    //homeMain append
+    //
+  } else {
     //noteMain append
     const noteMainLayout = handleNoteMainLayout(data![0])
     mainEl?.replaceChildren(noteMainLayout)
 
-    //overlay
-    const { default: handleOverlayLayout } = await import("./overlay/handleOverlayLayout.js")
+
+    const changeIcon = (selection: string, overlayLayout: HTMLElement | SVGElement): void => {
+      const overlayHeaderIcon = overlayLayout.querySelector("#overlayHeaderIcon")
+      const headerIcon = headerLayout.querySelector("#headerIcon")
+      const headerIsIcon = headerLayout.querySelector("#isIcon")
+      const currentSidebar = sidebarLayout.querySelector(`#id-${data![0]._id}`)
+      const sidebarIcon = currentSidebar?.querySelector("#sidebarIcon")
+      const sidebarIconNext = sidebarIcon?.nextSibling;
+      (overlayHeaderIcon as HTMLElement).innerText = selection;
+      (headerIcon as HTMLElement).innerText = selection;
+      (sidebarIcon as HTMLElement).innerText = selection;
+      (headerIsIcon as HTMLElement).classList.contains("hidden") && (headerIsIcon as HTMLElement).classList.remove("hidden");
+      (sidebarIcon as HTMLElement).classList.contains("hidden") && (sidebarIcon as HTMLElement).classList.remove("hidden");
+      !(sidebarIconNext as HTMLElement).classList.contains("hidden") && (sidebarIconNext as HTMLElement).classList.add("hidden");
+    }
+
+    //overlay header title
     const overlay = documentLayout.element.querySelector("#overlay")
     const noteTitle = documentLayout.element.querySelector("#noteTitle")
+
     noteTitle?.addEventListener("click", async (e: Event): Promise<void> => {
       e?.preventDefault()
       e?.stopPropagation()
+
       const rect = (e?.target as HTMLElement).getBoundingClientRect()
-      const overlayLayout = await handleOverlayLayout({ left: Math.round(rect.x), top: Math.round(rect.y) })
+      const { default: handleOverlayLayout } = await import("./overlay/handleOverlayLayout.js")
       const { default: handleOverlayHeaderTitleLayout } = await import("./overlay/headerTitle/handleOverlayHeaderTitleLayout.js")
+
+      const overlayLayout = await handleOverlayLayout({ left: Math.round(rect.x - 60), top: Math.round(rect.y + 25) })
       const overlayHeaderTitleLayout = await handleOverlayHeaderTitleLayout(data![0])
+
       const appendOverlay = overlayLayout.querySelector("#appendOverlay")
+      const overlayHeaderIconBtn = overlayHeaderTitleLayout.querySelector("#overlayHeaderIconBtn")
+
+      //overlay icon change button event
+      overlayHeaderIconBtn?.addEventListener("click", (e: Event): void => {
+        e?.preventDefault()
+        e?.stopPropagation()
+        const picker = new EmojiButton()
+        picker.on("emoji", (selection: string): void => {
+          dataProxy.updateData = { row: data![0].row, id: data![0]._id, selector: "icon", value: selection };
+          changeIcon(selection, overlayLayout)
+          setIcon(selection)
+        })
+
+        picker.togglePicker(e?.target)
+        document.querySelector(".wrapper")?.classList.add("z-[999]")
+      })
+
       appendOverlay?.appendChild(overlayHeaderTitleLayout)
       overlay?.appendChild(overlayLayout)
     })
 
-
-  } else {
-    //homeMain append
   }
 
   //sidebar width start
@@ -61,7 +98,7 @@ const handleDocumentLayout = async (id?: string): Promise<HTMLElement | SVGEleme
   }
   const handleResize = (): void => {
     document.addEventListener("mousemove", resize, false)
-    document.addEventListener("mouseup", () => {
+    document.addEventListener("mouseup", (): void => {
       document.removeEventListener("mousemove", resize, false)
     }, false)
   }
