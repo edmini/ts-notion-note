@@ -61,12 +61,12 @@ class HandleGoogleData implements GoogleDataType {
   auth: any
   sheets: any;
   drive: any;
-  // folderId: string | undefined; 
-  menu: [string[]];
-  type: [string[]];
-  datas: [string[][]];
+  folderId: string | undefined;
+  menu: string[][] | undefined
+  type: string[][] | undefined
+  datas: string[][] | undefined
   status: number | undefined;
-  // resultId: string | undefined
+  resultId: string | undefined
   constructor() {
     this.Authorize()
   }
@@ -111,8 +111,8 @@ class HandleGoogleData implements GoogleDataType {
       this.type = res.data.valueRanges[1].values
       this.datas = res.data.valueRanges[2].values
 
-      this.datas.map((data: any): void => {
-        this.handleData(this.menu[0], this.type[0], data)
+      this.datas!.map((data: any): void => {
+        this.handleData(this.menu![0], this.type![0], data)
       })
     } catch (error) {
       this.status = 401
@@ -236,10 +236,11 @@ class HandleGoogleData implements GoogleDataType {
       const bufferStream = new Readable()
       bufferStream.push(imageFile.buffer)
       bufferStream.push(null)
+      const encodedFileName = Buffer.from(imageFile.originalname, 'utf8').toString()
       const fileMetadata = {
-        name: imageFile.originalname,
+        name: encodedFileName,
         mimeType: imageFile.mimetype,
-        parents: this.folderId
+        parents: [`${this.folderId}`] //this.folderId
       }
       const media = {
         mimeType: imageFile.mimetype,
@@ -258,7 +259,7 @@ class HandleGoogleData implements GoogleDataType {
         },
         auth: this.auth
       })
-      console.log("file data : ", file.data)
+      console.log(file)
       this.resultId = file.data.id
       this.status = file.status
     } catch (error) {

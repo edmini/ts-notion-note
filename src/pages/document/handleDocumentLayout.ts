@@ -1,6 +1,7 @@
 
 import elementCreator from "../../static/creator.js"
 import dataProxy from "./handleStorageData.js"
+import overlayHeaderTitleLayoutEl from "./overlay/headerTitle/overlayHeaderTitleLayout.js"
 
 const handleDocumentLayout = async (id?: string): Promise<HTMLElement | SVGElement> => {
 
@@ -19,7 +20,7 @@ const handleDocumentLayout = async (id?: string): Promise<HTMLElement | SVGEleme
   const headerEl = documentLayout.element.querySelector("#header")
   const mainEl = documentLayout.element.querySelector("main")
 
-  sidebarEl?.appendChild(sidebarLayout)
+  sidebarEl?.replaceChildren(sidebarLayout)
   headerEl?.replaceChildren(headerLayout)
 
   if (!id) {
@@ -77,6 +78,26 @@ const handleDocumentLayout = async (id?: string): Promise<HTMLElement | SVGEleme
 
         picker.togglePicker(e?.target)
         document.querySelector(".wrapper")?.classList.add("z-[999]")
+      })
+      //overlay title change button event
+      const overlayHeaderTitle = overlayHeaderTitleLayout.querySelector("#overlayHeaderTitle")
+      const headerTitle = headerLayout.querySelector("#headerTitle")
+      const mainTitle = noteMainLayout.querySelector("#title")
+      const currentSidebar = sidebarLayout.querySelector(`#id-${data![0]._id}`)
+      const sidebarTitle = currentSidebar?.querySelector("#title")
+      overlayHeaderTitle?.addEventListener("click", (e: Event): void => {
+        e.stopPropagation();
+        (e.target as HTMLInputElement).value = data![0].title;
+      })
+      overlayHeaderTitle?.addEventListener("input", (e: Event): void => {
+        (headerTitle as HTMLElement).innerText = (e.target as HTMLInputElement).value;
+        (mainTitle as HTMLElement).innerText = (e.target as HTMLInputElement).value;
+        (sidebarTitle as HTMLElement).innerText = (e.target as HTMLInputElement).value;
+      })
+      overlayHeaderTitle?.addEventListener("blur", (e: Event): void => {
+        e.preventDefault();
+        const newTitle = (overlayHeaderTitle as HTMLInputElement).value;
+        dataProxy.updateData = { row: data![0].row, id: data![0]._id, selector: "title", value: newTitle }
       })
 
       appendOverlay?.appendChild(overlayHeaderTitleLayout)

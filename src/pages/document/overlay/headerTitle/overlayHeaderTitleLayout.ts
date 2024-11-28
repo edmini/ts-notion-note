@@ -48,30 +48,16 @@ const overlayHeaderTitleLayoutEl = (data: any): ElementLayout => {
                   element: "span",
                   id: "overlayHeaderIcon",
                   class: "w-full h-full",
-                  text: data.icon//""//icon
+                  text: data.icon
                 }]
               }]
             }]
           }, {
-            element: "div",
+            element: "input",
+            attrs: { type: "text", value: data.title },
             id: "overlayHeaderTitle",
-            class: "max-w-full w-full whitespace-prewrap break-all caret-notion-55 blokc grow text-sm leading-5 py-1 px-2.5 rounded-[4px] shadow-[rgba(15,15,15,0.1)0px 0px 0px 1px inset] bg-notion-242/60 cursor-text relative border border-notion-145/50",
-            actions: {
-              mouseover: (e: Event | undefined) => {
-                (e?.target as HTMLElement).contentEditable = 'true';
-              },
-              click: (e: Event | undefined) => {
-                e?.preventDefault()
-                e?.stopPropagation();
-                (e?.target as HTMLElement).contentEditable = 'true';
-              },
-              blur: (e: Event | undefined) => {
-                (e?.target as HTMLElement).contentEditable = 'false';
-                const newTitle = (e?.target as HTMLElement).innerText
-                dataProxy.updateData = { row: data.row, id: data._id, selector: "title", value: newTitle }
-              }
-            },
-            text: data.title//""//title
+            class: "max-w-full w-full whitespace-prewrap break-all caret-notion-55 blokc grow text-sm leading-5 py-1 px-2.5 rounded-[4px] shadow-[rgba(15,15,15,0.1)0px 0px 0px 1px inset] bg-notion-242/60 cursor-text relative outline-none border border-notion-145/50",
+            // text: data.title
           }]
         }, {
           element: "div",

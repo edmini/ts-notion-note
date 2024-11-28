@@ -16,11 +16,25 @@ const views = {
     return notFoundLayout
   },
   Document: async (params?: Params): Promise<HTMLElement | SVGElement> => {
-    if (!params?.id) {
-      const res = await fetch("/api")
-      const result = await res.json()
-      dataProxy.noteList = result
-    }
+    const res = await fetch("/api")
+    const result = await res.json()
+    dataProxy.noteList = result
+
+    // if (!params?.id) {
+    //   const res = await fetch("/api")
+    //   const result = await res.json()
+    //   dataProxy.noteList = result
+    // } else {
+    //   const prevData = dataProxy.noteList
+    //   console.log(prevData)
+    //   if (prevData?.length! > 0) {
+    //     dataProxy.noteList = prevData
+    //   } else {
+    //     const res = await fetch("/api")
+    //     const result = await res.json()
+    //     dataProxy.noteList = result
+    //   }
+    // }
 
     const { default: handleDocumentLayout } = await import("./pages/document/handleDocumentLayout.js")
     const documentLayout = await handleDocumentLayout(params?.id)

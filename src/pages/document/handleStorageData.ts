@@ -19,12 +19,6 @@ interface Storage {
   updateData: any
 }
 
-const storage: Storage = {
-  noteList: [],
-  appendData: null,
-  updateData: null
-}
-
 enum NoteNumber {
   row = 'A',
   _id = 'B',
@@ -39,6 +33,19 @@ enum NoteNumber {
   icon = 'K',
   userId = 'L',
   createdAt = 'M',
+}
+
+type NoteNuberKeys = keyof typeof NoteNumber
+
+interface Data {
+  selector: NoteNuberKeys;
+  row: number;
+  value: string;
+}
+const storage: Storage = {
+  noteList: [],
+  appendData: null,
+  updateData: null
 }
 
 const getDataFetch = async () => {
@@ -58,7 +65,7 @@ const appendDataFetch = async (data: any): Promise<any> => {
   console.log(result)
   return result
 }
-const updateDataFetch = async (data: any): Promise<any> => {
+const updateDataFetch = async (data: Data): Promise<any> => {
   const range: string = `documents!${NoteNumber[data.selector]}${data.row}:${NoteNumber[data.selector]}${data.row}`
   const res = await fetch("/api", {
     method: "PUT",
@@ -89,12 +96,12 @@ const handleProxyData: ProxyHandler<Storage> = {
         if (target.noteList) {
           target.noteList = target.noteList.map((data: Note): Note => {
             if (data._id === value.id) {
-              updateDataFetch(value)// api fetch
               for (const key in data) {
                 if (value.hasOwnProperty(key)) {
                   (data as any)[key] = value[key];
                 }
               }
+              updateDataFetch(value)// api fetch
             }
             return data
           })

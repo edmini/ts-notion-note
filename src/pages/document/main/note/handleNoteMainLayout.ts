@@ -33,6 +33,7 @@ const { coverLayout } = elementCreator(coverLayoutEl())
 const { toolbarLayout } = elementCreator(toolbarLayoutEl())
 
 const cover = coverLayout.element.querySelector("#cover")
+const changeCoverBtn = coverLayout.element.querySelector("#changeCoverBtn")
 const icon = toolbarLayout.element.querySelector("#icon")
 const iconEl = toolbarLayout.element.querySelector("#iconEl")
 const isIcon = toolbarLayout.element.querySelector("#isIcon")
@@ -85,27 +86,49 @@ export const setTitle = (titleStr?: string): void => {
   }
 }
 
+//setSidebar icon title
 const setSidebarIcon = (iconStr?: string) => {
   const id = toolbarLayout.element.dataset.id
   const currentSidebar = document.querySelector(`#id-${id}`)
   const sidebarIcon = currentSidebar?.querySelector("#sidebarIcon")
   const sidebarIconNext = sidebarIcon?.nextSibling;
-  sidebarIcon && (sidebarIcon as HTMLElement)?.innerText = iconStr;
-  (sidebarIcon as HTMLElement).classList.contains("hidden") && (sidebarIcon as HTMLElement).classList.remove("hidden");
-  !(sidebarIconNext as HTMLElement).classList.contains("hidden") && (sidebarIconNext as HTMLElement).classList.add("hidden");
-
-
+  if (sidebarIcon) {
+    (sidebarIcon as HTMLElement).innerText = iconStr ?? "";
+  }
+  if (iconStr) {
+    (sidebarIcon as HTMLElement).classList.contains("hidden") && (sidebarIcon as HTMLElement).classList.remove("hidden");
+    !(sidebarIconNext as HTMLElement).classList.contains("hidden") && (sidebarIconNext as HTMLElement).classList.add("hidden");
+  } else {
+    !(sidebarIcon as HTMLElement).classList.contains("hidden") && (sidebarIcon as HTMLElement).classList.add("hidden");
+    (sidebarIconNext as HTMLElement).classList.contains("hidden") && (sidebarIconNext as HTMLElement).classList.remove("hidden");
+  }
 }
 const setSidebarTitle = (titleStr?: string) => {
-
+  const id = toolbarLayout.element.dataset.id
+  const currentSidebar = document.querySelector(`#id-${id}`)
+  const sidebarTitle = currentSidebar?.querySelector("#title");
+  if (sidebarTitle) {
+    (sidebarTitle as HTMLElement).innerText = titleStr ?? "";
+  }
 }
+//setHeader icon title
 const setHeaderIcon = (iconStr?: string) => {
   const headerIcon = document.querySelector("#headerIcon");
   const headerIsIcon = document.querySelector("#isIcon");
-  headerIcon && (headerIcon as HTMLElement)?.innerText = iconStr;
-  (headerIsIcon as HTMLElement).classList.contains("hidden") && (headerIsIcon as HTMLElement).classList.remove("hidden");
+  if (headerIcon) {
+    (headerIcon as HTMLElement).innerText = iconStr ?? "";
+  }
+  if (iconStr) {
+    (headerIsIcon as HTMLElement).classList.contains("hidden") && (headerIsIcon as HTMLElement).classList.remove("hidden");
+  } else {
+    !(headerIsIcon as HTMLElement).classList.contains("hidden") && (headerIsIcon as HTMLElement).classList.add("hidden");
+  }
 }
 const setHeaderTitle = (titleStr?: string) => {
+  const headerTitle = document?.querySelector("#headerTitle");
+  if (headerTitle) {
+    (headerTitle as HTMLElement).innerText = titleStr ?? "";
+  }
 }
 
 
@@ -120,32 +143,42 @@ const updateDataProxy = (selector: string, value: string): void => {
 const handleFile = (e: Event): void => {
   e.preventDefault()
   const fileSelector = document.createElement("input")
-  let fileId = ""
   fileSelector.type = "file"
   fileSelector.setAttribute("name", "file")
   fileSelector.addEventListener("change", async (e) => {
     e.preventDefault()
-    const file = e.target?.files[0]
-    const uploadFile = new FormData()
-    uploadFile.append("file", file)
-    const res = await fetch("/api/imageUpload", {
-      method: "POST",
-      body: uploadFile,
-    })
-    const result = await res.json()
-    console.log(result)
-    if (result.status === 200) {
-      fileId = result.imageId
-      updateDataProxy("coverImage", fileId)
-      setCover(fileId)
+    const input = e.target as HTMLInputElement;
+    if (input.files && input.files[0]) {
+      const file = input.files[0]
+      const uploadFile = new FormData()
+      uploadFile.append("file", file)
+      const res = await fetch("/api/imageUpload", {
+        method: "POST",
+        body: uploadFile,
+      })
+      const result = await res.json()
+      console.log(result)
+      if (result.status === 200) {
+        const fileId = result.imageId
+        updateDataProxy("coverImage", fileId)
+        setCover(fileId)
+      } else {
+        alert("Image upload fail")
+        updateDataProxy("coverImage", "")
+        setCover()
+      }
     } else {
-      alert("Image upload fail")
+      console.log("Please select file!")
     }
   })
   fileSelector.click()
 }
-//cover add
-coverBtn?.addEventListener("click", async (e: Event) => {
+//Add Cover and Change Cover
+coverBtn?.addEventListener("click", (e: Event): void => {
+  e.preventDefault()
+  handleFile(e)
+})
+changeCoverBtn?.addEventListener("click", (e: Event): void => {
   e.preventDefault()
   handleFile(e)
 })
@@ -170,6 +203,8 @@ removeIconBtn?.addEventListener("click", (e) => {
   e.preventDefault()
   e.stopPropagation()
   setIcon()
+  setSidebarIcon()
+  setHeaderIcon()
   updateDataProxy("icon", "")
 })
 
@@ -181,6 +216,11 @@ title?.addEventListener("mouseover", (e: Event): void => {
 title?.addEventListener("click", (e: Event): void => {
   e.preventDefault();
   (e.target as HTMLElement).contentEditable = 'true';
+})
+title?.addEventListener("input", (e: Event): void => {
+  const newTitle = (e.target as HTMLInputElement).innerText
+  setSidebarTitle(newTitle)
+  setHeaderTitle(newTitle)
 })
 title?.addEventListener("blur", (e: Event): void => {
   e.preventDefault();
