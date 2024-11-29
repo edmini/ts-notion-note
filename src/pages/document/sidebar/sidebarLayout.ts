@@ -35,6 +35,7 @@ const sidebarLayoutEl = (): ElementLayout => {
             class: "hidden absolute inset-0 rounded-r-lg -z-[1] bg-white shadow-[rgba(15,15,15,0.05)_0px_0px_0px_1px_rgba(15,15,15,0.1)_0px_3px_6px_rgba(15,15,15,0.2)_0px_9px_24px]"
           }, {
             element: "div",
+            id: "resizeHover",
             class: "absolute inset-0 rounded-r-lg -z-[1] hidden shadow-[rgba(0,0,0,0.024)_-1px_0px_0px_0px_inset]"
           }, {
             element: "div",
@@ -81,10 +82,10 @@ const sidebarLayoutEl = (): ElementLayout => {
             subElements: [{
               element: "div",
               class: "group/resize cursor-col-resize h-full w-3 -ml-1.5",
-              subElements: [{
-                element: "div",
-                class: "h-full w-1 group-hover/resize:bg-notion-95/10"
-              }]
+              // subElements: [{
+              //   element: "div",
+              //   class: "h-full w-1 group-hover/resize:shadow-inner"//bg-notion-95/10
+              // }]
             }]
           }]
         }]

@@ -49,7 +49,8 @@ const overlayLayoutEl = (data: any): ElementLayout => {
                     element: "div",
                     id: "appendOverlay",
                     attrs: { role: "dialog" },
-                    class: "rounded-[10px] bg-white backdrop-filter-none relative max-w-[calc(-24px+100vw)] shadow-2xl overflow-hidden",
+                    styles: { boxShadow: "rgba(15,15,15,0.02) 0px 0px 0px 1px, rgba(15,15,15,0.2) 0px 9px 24px" },
+                    class: "rounded-[10px] bg-white backdrop-filter-none relative max-w-[calc(-24px+100vw)] overflow-hidden",
                   }]
                 }]
               }]

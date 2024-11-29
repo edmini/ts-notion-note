@@ -38,6 +38,7 @@ const views = {
 
     const { default: handleDocumentLayout } = await import("./pages/document/handleDocumentLayout.js")
     const documentLayout = await handleDocumentLayout(params?.id)
+
     return documentLayout
   },
   Preview: async (params: Params): Promise<HTMLElement | SVGElement> => {

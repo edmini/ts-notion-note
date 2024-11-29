@@ -36,9 +36,9 @@ interface Note {
 }
 
 
-const favoriteItemLayoutEl = (): ElementLayout => {
-  const favoriteItemLayoutElTree: ElementLayout = {
-    favoriteItemLayoutEl: {
+const itemLayoutEl = (favorite?: string): ElementLayout => {
+  const itemLayoutElTree: ElementLayout = {
+    itemLayoutEl: {
       element: "div",
       class: "w-full",
       subElements: [{
@@ -52,7 +52,7 @@ const favoriteItemLayoutEl = (): ElementLayout => {
             element: "span",
             styles: { textTransform: "initial" },
             class: "text-xs leading-none text-notion-145 font-normal transition-[color] duration-[100ms] ease-out",
-            text: "Favorite"
+            text: favorite ? "Favorite" : "Personal"
           }, {
             element: "div",// more plus icon
             class: "ml-auto select-none",
@@ -127,10 +127,10 @@ const favoriteItemLayoutEl = (): ElementLayout => {
       }]
     }
   }
-  return favoriteItemLayoutElTree
+  return itemLayoutElTree
 }
 
 
-export default favoriteItemLayoutEl
+export default itemLayoutEl
 
 

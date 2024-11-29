@@ -1,4 +1,5 @@
 
+import { connectors } from "googleapis/build/src/apis/connectors/index.js"
 import elementCreator from "../../../../../../static/creator.js"
 import dataProxy from "../../../../handleStorageData.js"
 
@@ -48,7 +49,8 @@ const itemBodyEl = (): ElementLayout => {
       class: "flex flex-col gap-px"
     }
   }
-  return itemBodyElTree
+  const itemBodyEl = { ...itemBodyElTree.itemBodyEl }
+  return { itemBodyEl }
 }
 const { itemBody } = elementCreator(itemBodyEl())
 
@@ -104,13 +106,10 @@ export const createItem = (data: Note): void => {
 
 const datas = dataProxy.noteList
 datas?.map((data: Note): void => {
-  if (data.isArchived === false) {
-    createItem(data)
-  }
+  createItem(data)
 })
 
-const handleItemLayout = (favorite?: string): HTMLElement | SVGElement => {
-  // handleData(favorite)
+const handleItemLayout = (): HTMLElement | SVGElement => {
 
   return itemBody.element
 }

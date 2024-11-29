@@ -1,9 +1,12 @@
 
 import elementCreator from "../../static/creator.js"
 import dataProxy from "./handleStorageData.js"
-import overlayHeaderTitleLayoutEl from "./overlay/headerTitle/overlayHeaderTitleLayout.js"
 
 const handleDocumentLayout = async (id?: string): Promise<HTMLElement | SVGElement> => {
+
+  const SIDEBAR_DEFAULT_WIDTH = 240
+  const SIDEBAR_MAX_WIDTH = 480
+  const SIDEBAR_MIN_WIDTH = 0
 
   const data = dataProxy.noteList?.filter((data) => data._id === id)
 
@@ -30,7 +33,6 @@ const handleDocumentLayout = async (id?: string): Promise<HTMLElement | SVGEleme
     //noteMain append
     const noteMainLayout = handleNoteMainLayout(data![0])
     mainEl?.replaceChildren(noteMainLayout)
-
 
     const changeIcon = (selection: string, overlayLayout: HTMLElement | SVGElement): void => {
       const overlayHeaderIcon = overlayLayout.querySelector("#overlayHeaderIcon")
@@ -59,7 +61,7 @@ const handleDocumentLayout = async (id?: string): Promise<HTMLElement | SVGEleme
       const { default: handleOverlayLayout } = await import("./overlay/handleOverlayLayout.js")
       const { default: handleOverlayHeaderTitleLayout } = await import("./overlay/headerTitle/handleOverlayHeaderTitleLayout.js")
 
-      const overlayLayout = await handleOverlayLayout({ left: Math.round(rect.x - 60), top: Math.round(rect.y + 25) })
+      const overlayLayout = await handleOverlayLayout({ left: Math.round(rect.x - (rect.x > SIDEBAR_DEFAULT_WIDTH ? 150 : 60)), top: Math.round(rect.y + 20) })
       const overlayHeaderTitleLayout = await handleOverlayHeaderTitleLayout(data![0])
 
       const appendOverlay = overlayLayout.querySelector("#appendOverlay")
@@ -124,10 +126,10 @@ const handleDocumentLayout = async (id?: string): Promise<HTMLElement | SVGEleme
     }, false)
   }
   const resize = (e: MouseEvent): void => {
-    let size = 240
-    if ((e as MouseEvent).x < 240 || (e as MouseEvent).x > 480) {
-      if ((e as MouseEvent).x < 240) size = 240
-      if ((e as MouseEvent).x > 480) size = 480
+    let size = SIDEBAR_DEFAULT_WIDTH
+    if ((e as MouseEvent).x < SIDEBAR_DEFAULT_WIDTH || (e as MouseEvent).x > SIDEBAR_MAX_WIDTH) {
+      if ((e as MouseEvent).x < SIDEBAR_DEFAULT_WIDTH) size = SIDEBAR_DEFAULT_WIDTH
+      if ((e as MouseEvent).x > SIDEBAR_MAX_WIDTH) size = SIDEBAR_MAX_WIDTH
     } else {
       size = (e as MouseEvent).x
     }
@@ -137,16 +139,28 @@ const handleDocumentLayout = async (id?: string): Promise<HTMLElement | SVGEleme
   hideSidebarBtn?.addEventListener("click", (e: Event): void => {
     e.stopPropagation()
     e.preventDefault()
-    setSidebarWidth(0);
+    setSidebarWidth(SIDEBAR_MIN_WIDTH);
     (showSidebarIcon as HTMLElement).classList.remove("hidden");
   })
   showSidebarBtn?.addEventListener("click", (e: Event): void => {
     e.stopPropagation()
     e.preventDefault()
-    setSidebarWidth(240);
+    setSidebarWidth(SIDEBAR_DEFAULT_WIDTH);
     (showSidebarIcon as HTMLElement).classList.add("hidden");
   })
+
+  const resizeHover = sidebarLayout.querySelector("#resizeHover")
+  console.log(resizeHover)
   sidebarResize?.addEventListener("mousedown", handleResize)
+  sidebarResize?.addEventListener("mouseover", (e: Event) => {
+    sidebarEl!.style.boxShadow = "rgba(0,0,0,0.1) -2px 0px 0px 0px inset";
+    (resizeHover as HTMLElement)!.style.boxShadow = "rgba(0,0,0,0.1) -2px 0px 0px 0px inset";
+  })
+  sidebarResize?.addEventListener("mouseout", (e: Event) => {
+    sidebarEl!.style.boxShadow = "rgba(0,0,0,0.024) -1px 0px 0px 0px inset";
+    (resizeHover as HTMLElement)!.style.boxShadow = "rgba(0,0,0,0.024) -1px 0px 0px 0px inset";
+  })
+
   //sidebar width end
 
 

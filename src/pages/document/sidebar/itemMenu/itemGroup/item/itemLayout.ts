@@ -45,7 +45,7 @@ const itemLayoutEl = (data: Note): ElementLayout => {
         element: "div",
         attrs: { role: "treeitem" },
         classes: [`pl-[${data.level * 8}px]`],
-        class: "group/item flex text-inherit no-underline select-none transition-[background] duration-[150ms] cursor-pointer w-full rounded-md mx-0 hover:bg-notion-0/5",
+        class: `group/item flex text-inherit no-underline select-none transition-[background] duration-[150ms] cursor-pointer w-full rounded-md mx-0 hover:bg-notion-0/5 activeItem`,
         subElements: [{
           element: "a",
           attrs: { href: `/document/${data._id}`, "data-link": "spa-link" },

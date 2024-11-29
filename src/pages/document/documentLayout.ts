@@ -30,7 +30,7 @@ const documentLayoutEl = (): ElementLayout => {
           class: "w-screen h-full relative flex flex-1 bg-white cursor-text",
           subElements: [{
             element: "nav",
-            styles: { transitionProperty: "width, transform", transitionDuration: "0ms, 200ms", transitionTimingFunction: "ease, ease", boxShadow: "rgba(0,0,0,0.024) -1px 0px 0px 0px inset" },
+            styles: { transitionProperty: "width, transform", transitionDuration: "0ms, 200ms", transitionTimingFunction: "ease, ease", },//boxShadow: "rgba(0,0,0,0.024) -1px 0px 0px 0px inset"
             class: "order-1 grow-0 shrink-0 pointer-events-none relative z-[111] bg-white w-[248px] print:hidden" // bg-notion-247
           }, {
             element: "div",
