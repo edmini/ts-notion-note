@@ -9,6 +9,10 @@
     grid-template-columns: [full-start] var(--margin-left-width,var(--margin-width)) [content-start] var(--content-width) [content-end] var(--margin-right-width,var(--margin-width)) [full-end];
     width: 100%;
 }
+.layout.layout-home{
+  --content-width: minmax(auto, 900px);
+  --margin-width: minmax(56px, 1fr);
+}
 .layout-full {
     gap: inherit;
     grid-column: full;

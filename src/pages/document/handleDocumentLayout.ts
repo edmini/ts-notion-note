@@ -27,6 +27,9 @@ const handleDocumentLayout = async (id?: string): Promise<HTMLElement | SVGEleme
   headerEl?.replaceChildren(headerLayout)
 
   if (!id) {
+    const { default: handleHomeMainLayout } = await import("./main/home/handleHomeMainLayout.js")
+    const homeMainLayout = await handleHomeMainLayout()
+    mainEl?.replaceChildren(homeMainLayout)
     //homeMain append
     //
   } else {
@@ -150,7 +153,6 @@ const handleDocumentLayout = async (id?: string): Promise<HTMLElement | SVGEleme
   })
 
   const resizeHover = sidebarLayout.querySelector("#resizeHover")
-  console.log(resizeHover)
   sidebarResize?.addEventListener("mousedown", handleResize)
   sidebarResize?.addEventListener("mouseover", (e: Event) => {
     sidebarEl!.style.boxShadow = "rgba(0,0,0,0.1) -2px 0px 0px 0px inset";
