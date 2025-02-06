@@ -1,5 +1,4 @@
 
-import { connectors } from "googleapis/build/src/apis/connectors/index.js"
 import elementCreator from "../../../../../../static/creator.js"
 import dataProxy from "../../../../handleStorageData.js"
 
